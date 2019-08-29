@@ -38,15 +38,15 @@ class Ingrediente(models.Model):
 class UnidadeDeMedida(models.Model):
     nome = models.CharField(max_length=50)
 
-class ReceitaIngrediente():
+class ReceitaIngrediente(models.Model):
     receita = models.ForeignKey('Receita', on_delete=models.CASCADE)
     unidade_de_medida = models.ForeignKey('UnidadeDeMedida', on_delete=models.CASCADE)
-    quantidade = models.DecimalField(decimal_places=2, null=True)
+    quantidade = models.DecimalField(max_digits=10, decimal_places=2, null=True)
 
-class AvaliacaoCriterio():
-    nom_criterio = models.CharField(null=True)
+class AvaliacaoCriterio(models.Model):
+    nom_criterio = models.CharField(null=True, max_length=40)
 
-class Avaliacao():
+class Avaliacao(models.Model):
     usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE)
     receita = models.ForeignKey('Receita', on_delete=models.CASCADE)
     criterio_de_avaliacao = models.ForeignKey('AvaliacaoCriterio', on_delete=models.CASCADE)
