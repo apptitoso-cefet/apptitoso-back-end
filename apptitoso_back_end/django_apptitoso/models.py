@@ -10,14 +10,14 @@ class Usuario(models.Model):
     senha = models.CharField(max_length=64)
     nome = models.CharField(max_length=100)
     foto = models.BinaryField()
-    receitas_salvas = models.ManyToMany('Receita')
+    receitas_salvas = models.ManyToManyField('Receita')
 
 class Receita(models.Model):
     nome = models.CharField(max_length=50)
-    descricao = models.CharField()
+    descricao = models.TextField()
     foto = models.BinaryField(null=True)
     email = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    categorias = models.ManyToMany('Categoria')
+    categorias = models.ManyToManyField('Categoria')
 
 class Categoria(models.Model):
     nome = models.CharField(max_length=20)
@@ -47,7 +47,7 @@ class AvaliacaoCriterio():
     nom_criterio = models.CharField(null=True)
 
 class Avaliacao():
-    usuario = models.ForeignKey('Usuario')
-    receita = models.ForeignKey('Receita')
-    criterio_de_avaliacao = models.ForeignKey('AvaliacaoCriterio')
+    usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE)
+    receita = models.ForeignKey('Receita', on_delete=models.CASCADE)
+    criterio_de_avaliacao = models.ForeignKey('AvaliacaoCriterio', on_delete=models.CASCADE)
     nota = models.PositiveSmallIntegerField(null=True)
