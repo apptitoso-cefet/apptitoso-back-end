@@ -4,7 +4,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 class ConceitoCulinario(models.Model):
     nome = models.CharField(max_length=50)
     foto = models.BinaryField(null=True)
-
+    descricao = models.TextField(default='')
+    
 class Usuario(models.Model):
     email = models.CharField(max_length=100, unique=True)
     senha = models.CharField(max_length=64)
