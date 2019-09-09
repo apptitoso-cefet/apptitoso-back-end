@@ -3,22 +3,25 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 class ConceitoCulinario(models.Model):
     nome = models.CharField(max_length=50)
-    foto = models.BinaryField(null=True)
+    foto = models.ImageField(null=True)
     descricao = models.TextField(default='')
     
 class Usuario(models.Model):
     email = models.CharField(max_length=100, unique=True)
     senha = models.CharField(max_length=64)
     nome = models.CharField(max_length=100)
-    foto = models.BinaryField()
-    receitas_salvas = models.ManyToManyField('Receita')
+    foto = models.ImageField(null=True)
+    receitas_salvas = models.ManyToManyField('Receita', blank=True)
+
+    def __str__(self):
+        return self.nome
 
 class Receita(models.Model):
     nome = models.CharField(max_length=50)
     descricao = models.TextField()
     foto = models.BinaryField(null=True)
     email = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    categorias = models.ManyToManyField('Categoria')
+    categorias = models.ManyToManyField('Categoria', blank=True)
 
 class Categoria(models.Model):
     nome = models.CharField(max_length=20)
@@ -28,7 +31,7 @@ class Passo(models.Model):
     descricao = models.CharField(max_length=20)
     ordem_passo = models.IntegerField()
     foto = models.BinaryField(null=True)
-    timer = models.OneToOneField('PassoTimer', on_delete=models.CASCADE)
+    timer = models.OneToOneField('PassoTimer', on_delete=models.CASCADE, blank=True)
 
 class PassoTimer(models.Model):
     tempo = models.TimeField()
