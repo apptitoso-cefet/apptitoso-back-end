@@ -1,57 +1,78 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-class ConceitoCulinario(models.Model):
-    nome = models.CharField(max_length=50)
-    foto = models.ImageField(null=True)
-    descricao = models.TextField(default='')
-    
-class Usuario(models.Model):
+
+class CulinaryConcept(models.Model):
+    name = models.CharField(max_length=50)
+    picture = models.ImageField(null=True)
+    description = models.TextField(default='')
+
+
+class User(models.Model):
     email = models.CharField(max_length=100, unique=True)
-    senha = models.CharField(max_length=64)
-    nome = models.CharField(max_length=100)
-    foto = models.ImageField(null=True)
-    receitas_salvas = models.ManyToManyField('Receita', blank=True)
+    password = models.CharField(max_length=64)
+    name = models.CharField(max_length=100)
+    picture = models.ImageField(null=True)
+    saved_recipes = models.ManyToManyField('Recipe', blank=True)
 
     def __str__(self):
-        return self.nome
+        return self.name
 
-class Receita(models.Model):
-    nome = models.CharField(max_length=50)
-    descricao = models.TextField()
-    foto = models.BinaryField(null=True)
-    email = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    categorias = models.ManyToManyField('Categoria', blank=True)
 
-class Categoria(models.Model):
-    nome = models.CharField(max_length=20)
+class Recipe(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.TextField()
+    picture = models.BinaryField(null=True)
+    email = models.ForeignKey(User, on_delete=models.CASCADE)
+    categories = models.ManyToManyField('Category', blank=True)
 
-class Passo(models.Model):
-    receita = models.ForeignKey('Receita', on_delete=models.CASCADE)
-    descricao = models.CharField(max_length=20)
-    ordem_passo = models.IntegerField()
-    foto = models.BinaryField(null=True)
-    timer = models.OneToOneField('PassoTimer', on_delete=models.CASCADE, blank=True)
 
-class PassoTimer(models.Model):
-    tempo = models.TimeField()
+class Category(models.Model):
+    class Meta:
+        verbose_name_plural = 'Categories'
+    name = models.CharField(max_length=20)
 
-class Ingrediente(models.Model):
-    descricao = models.CharField(max_length=50)
 
-class UnidadeDeMedida(models.Model):
-    nome = models.CharField(max_length=50)
+class Step(models.Model):
+    recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE)
+    description = models.CharField(max_length=20)
+    step_order = models.IntegerField()
+    picture = models.BinaryField(null=True)
+    timer = models.OneToOneField(
+        'StepTimer', on_delete=models.CASCADE, blank=True)
 
-class ReceitaIngrediente(models.Model):
-    receita = models.ForeignKey('Receita', on_delete=models.CASCADE)
-    unidade_de_medida = models.ForeignKey('UnidadeDeMedida', on_delete=models.CASCADE)
-    quantidade = models.DecimalField(max_digits=10, decimal_places=2, null=True)
 
-class AvaliacaoCriterio(models.Model):
-    nom_criterio = models.CharField(null=True, max_length=40)
+class StepTimer(models.Model):
+    time = models.TimeField()
 
-class Avaliacao(models.Model):
-    usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE)
-    receita = models.ForeignKey('Receita', on_delete=models.CASCADE)
-    criterio_de_avaliacao = models.ForeignKey('AvaliacaoCriterio', on_delete=models.CASCADE)
-    nota = models.PositiveSmallIntegerField(null=True)
+
+class Ingredient(models.Model):
+    description = models.CharField(max_length=50)
+
+
+class UnitOfMeasurement(models.Model):
+    class Meta:
+        verbose_name_plural = 'Units of Measurement'
+    name = models.CharField(max_length=50)
+
+
+class RecipeIngredient(models.Model):
+    recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE)
+    unit_of_measurement = models.ForeignKey(
+        'UnitOfMeasurement', on_delete=models.CASCADE)
+    quantity = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True)
+
+
+class EvaluationCriteria(models.Model):
+    class Meta:
+        verbose_name_plural: 'Evaluation criteria'
+    name = models.CharField(null=True, max_length=40)
+
+
+class Evaluation(models.Model):
+    usuario = models.ForeignKey('User', on_delete=models.CASCADE)
+    recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE)
+    evaluation_criteria = models.ForeignKey(
+        'EvaluationCriteria', on_delete=models.CASCADE)
+    note = models.PositiveSmallIntegerField(null=True)
