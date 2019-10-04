@@ -76,14 +76,21 @@ WSGI_APPLICATION = 'apptitoso_back_end.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Apptitoso',
-        'USER': 'postgres',
-        'PASSWORD': 'admin',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase',
+    },
 }
+"""
+'default': {
+    'ENGINE': 'django.db.backends.postgresql',
+    'NAME': 'Apptitoso',
+    'USER': 'postgres',
+    'PASSWORD': 'admin',
+    'HOST': 'localhost',
+    'PORT': '5432',
+}
+"""
+
 
 
 # Password validation

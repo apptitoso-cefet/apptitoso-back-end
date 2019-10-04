@@ -18,4 +18,6 @@ from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    #url(r'^featureSetConfigajaxNew$', views.FeatureSetInsertAJAX.as_view(), name='feature_set_insertAJAX'),#Test:OK
+    #url(r'^featureSetConfigajax$', views.FeatureSetEditAJAX.as_view(), name='feature_set_editAJAX'),#Test:OK
 ]

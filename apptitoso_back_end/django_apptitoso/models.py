@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-
+from django.contrib.auth import models as authModels
 
 class CulinaryConcept(models.Model):
     name = models.CharField(max_length=50)
@@ -9,11 +9,13 @@ class CulinaryConcept(models.Model):
 
 
 class User(models.Model):
+    user = models.ForeignKey(authModels.User, models.PROTECT)
     email = models.CharField(max_length=100, unique=True)
-    password = models.CharField(max_length=64)
-    name = models.CharField(max_length=100)
+    #password = models.CharField(max_length=64)
+    #name = models.CharField(max_length=100)
     picture = models.ImageField(null=True, blank=True)
-    saved_recipes = models.ManyToManyField('Recipe', blank=True)
+
+    saved_recipes = models.ManyToManyField('Recipe', blank=True,related_name="user_recipe")
 
     def __str__(self):
         return self.name
@@ -23,7 +25,8 @@ class Recipe(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
     picture = models.BinaryField(null=True)
-    email = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_profile = models.ForeignKey(User, on_delete=models.CASCADE)
+
     categories = models.ManyToManyField('Category', blank=True)
 
 
