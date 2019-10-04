@@ -18,7 +18,7 @@ class User(models.Model):
     saved_recipes = models.ManyToManyField('Recipe', blank=True,related_name="user_recipe")
 
     def __str__(self):
-        return self.name
+        return self.email
 
 
 class Recipe(models.Model):
@@ -28,7 +28,8 @@ class Recipe(models.Model):
     user_profile = models.ForeignKey(User, on_delete=models.CASCADE)
 
     categories = models.ManyToManyField('Category', blank=True)
-
+    def __str__(self):
+        return self.name
 
 class Category(models.Model):
     class Meta:

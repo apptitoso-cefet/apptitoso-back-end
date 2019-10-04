@@ -1,6 +1,15 @@
 from django.shortcuts import render
+from django_apptitoso.models import *
+from django_apptitoso import views
+from django.forms.utils import ErrorList
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http.response import JsonResponse, HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
+from django.urls.base import reverse, reverse_lazy
+from django.views.generic.base import View, TemplateView
 
 # Create your views here.
+"""
 class RecipeInsertAJAX(View):
 
     def get(self, request):
@@ -40,17 +49,21 @@ class RecipeInsertAJAX(View):
                              "arrErr": arrErr })
 
 
+"""
+
+
 class RecipeListView(LoginRequiredMixin, View):
-    '''
+    """
     Created on XXX de XXX de XXX
 
     @author: Daniel Hasan Dalip <hasan@decom.cefetmg.br>
     Lista todas as receitas
-    '''
+    """
 
+    def get(self, request):
+        # arr_features = sorted(arr_features, key=lambda x: x["name"])
+        arrRecipes = []
+        for r in Recipe.objects.all():
+            arrRecipes.append({"name": r.name, "user": request.user.pk})
+        return JsonResponse({"arrReceitas": arrRecipes})
 
-    def get(self, request,nam_language):
-
-
-        arr_features = sorted(arr_features, key=lambda x: x['name'])
-        return JsonResponse({"arrFeatures":arr_features})
