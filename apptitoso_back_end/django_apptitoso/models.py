@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth import models as authModels
 
+
 class CulinaryConcept(models.Model):
     name = models.CharField(max_length=50)
     picture = models.ImageField(null=True, blank=True)
@@ -10,15 +11,10 @@ class CulinaryConcept(models.Model):
 
 class User(models.Model):
     user = models.ForeignKey(authModels.User, models.PROTECT)
-    email = models.CharField(max_length=100, unique=True)
-    #password = models.CharField(max_length=64)
-    #name = models.CharField(max_length=100)
     picture = models.ImageField(null=True, blank=True)
 
-    saved_recipes = models.ManyToManyField('Recipe', blank=True,related_name="user_recipe")
-
-    def __str__(self):
-        return self.email
+    saved_recipes = models.ManyToManyField(
+        'Recipe', blank=True, related_name="user_recipe")
 
 
 class Recipe(models.Model):
@@ -28,8 +24,10 @@ class Recipe(models.Model):
     user_profile = models.ForeignKey(User, on_delete=models.CASCADE)
 
     categories = models.ManyToManyField('Category', blank=True)
+
     def __str__(self):
         return self.name
+
 
 class Category(models.Model):
     class Meta:
@@ -63,7 +61,7 @@ class UnitOfMeasurement(models.Model):
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE)
     ingredient = models.ForeignKey(
-        'RecipeIngredient', on_delete=models.CASCADE, null=True)
+        'Ingredient', on_delete=models.CASCADE, null=True)
     unit_of_measurement = models.ForeignKey(
         'UnitOfMeasurement', on_delete=models.CASCADE)
     quantity = models.DecimalField(
