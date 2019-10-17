@@ -64,6 +64,14 @@ class RecipeListView(LoginRequiredMixin, View):
         # arr_features = sorted(arr_features, key=lambda x: x["name"])
         arrRecipes = []
         for r in Recipe.objects.all():
-            arrRecipes.append({"name": r.name, "user": request.user.pk})
+            arrRecipes.append({"name": r.name, "user": request.user.pk, "recipeAuthorName": r.user_profile.user.username})
         return JsonResponse({"arrReceitas": arrRecipes})
 
+class FullRecipeListView(View):
+
+    def get(self, request):
+        # arr_features = sorted(arr_features, key=lambda x: x["name"])
+        arrRecipes = []
+        for r in Recipe.objects.all():
+            arrRecipes.append({"name": r.name, "description": r.description, "picture": r.picture, "recipeAuthorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username})
+        return JsonResponse({"arrReceitas": arrRecipes})

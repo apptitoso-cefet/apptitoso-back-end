@@ -18,7 +18,7 @@ class User(models.Model):
 
 
 class Recipe(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
     description = models.TextField()
     picture = models.BinaryField(null=True)
     user_profile = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -32,12 +32,12 @@ class Recipe(models.Model):
 class Category(models.Model):
     class Meta:
         verbose_name_plural = 'Categories'
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=50)
 
 
 class Step(models.Model):
     recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE)
-    description = models.CharField(max_length=20)
+    description = models.TextField()
     step_order = models.IntegerField()
     picture = models.BinaryField(null=True)
     timer = models.OneToOneField(
@@ -63,7 +63,7 @@ class RecipeIngredient(models.Model):
     ingredient = models.ForeignKey(
         'Ingredient', on_delete=models.CASCADE, null=True)
     unit_of_measurement = models.ForeignKey(
-        'UnitOfMeasurement', on_delete=models.CASCADE)
+        'UnitOfMeasurement', on_delete=models.CASCADE, null=True)
     quantity = models.DecimalField(
         max_digits=10, decimal_places=2, null=True)
 

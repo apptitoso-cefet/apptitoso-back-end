@@ -21,6 +21,7 @@ from django.conf.urls import url
 urlpatterns = [
     path("admin/", admin.site.urls),
     url(r"^listRecipe$", views.RecipeListView.as_view()),
+    url(r"^listFullRecipe$", views.FullRecipeListView.as_view()),
     # url(r'^featureSetConfigajaxNew$', views.FeatureSetInsertAJAX.as_view(), name='feature_set_insertAJAX'),#Test:OK
     # url(r'^featureSetConfigajax$', views.FeatureSetEditAJAX.as_view(), name='feature_set_editAJAX'),#Test:OK
 ]
