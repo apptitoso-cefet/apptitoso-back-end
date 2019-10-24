@@ -41,11 +41,11 @@ class Step(models.Model):
     step_order = models.IntegerField()
     picture = models.BinaryField(null=True)
     timer = models.OneToOneField(
-        'StepTimer', on_delete=models.CASCADE, blank=True)
+        'StepTimer', on_delete=models.CASCADE, null=True, blank=True)
 
 
 class StepTimer(models.Model):
-    time = models.TimeField()
+    time = models.DurationField()
 
 
 class Ingredient(models.Model):
@@ -63,12 +63,12 @@ class RecipeIngredient(models.Model):
     ingredient = models.ForeignKey(
         'Ingredient', on_delete=models.CASCADE, null=True)
     unit_of_measurement = models.ForeignKey(
-        'UnitOfMeasurement', on_delete=models.CASCADE, null=True)
+        'UnitOfMeasurement', on_delete=models.CASCADE)
     quantity = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True)
+        max_digits=10, decimal_places=2, null=True, blank=True)
 
 
-class EvaluationCriteria(models.Model):
+class EvaluationCriterion(models.Model):
     class Meta:
         verbose_name_plural: 'Evaluation criteria'
     name = models.CharField(null=True, max_length=40)
@@ -77,6 +77,6 @@ class EvaluationCriteria(models.Model):
 class Evaluation(models.Model):
     usuario = models.ForeignKey('User', on_delete=models.CASCADE)
     recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE)
-    evaluation_criteria = models.ForeignKey(
-        'EvaluationCriteria', on_delete=models.CASCADE)
+    evaluation_criterion = models.ForeignKey(
+        'EvaluationCriterion', on_delete=models.CASCADE)
     note = models.PositiveSmallIntegerField(null=True)

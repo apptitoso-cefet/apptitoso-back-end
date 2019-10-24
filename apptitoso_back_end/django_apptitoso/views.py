@@ -73,5 +73,14 @@ class FullRecipeListView(View):
         # arr_features = sorted(arr_features, key=lambda x: x["name"])
         arrRecipes = []
         for r in Recipe.objects.all():
-            arrRecipes.append({"name": r.name, "description": r.description, "picture": r.picture, "recipeAuthorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username})
+            arrIngredients = []
+            for i in RecipeIngredient.objects.filter(recipe=r):
+                arrIngredients.append({"ingredient": str(i.quantity)+" "+i.unit_of_measurement.name+" de "+i.ingredient.description})
+            arrSteps = []
+            for s in Step.objects.filter(recipe=r):
+                if s.timer is None:
+                    arrSteps.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description})
+                else:
+                    arrSteps.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description, "timer": s.timer.time})
+            arrRecipes.append({"name": r.name, "description": r.description, "picture": r.picture, "recipeAuthorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username, "ingredients": arrIngredients, "steps": arrSteps})
         return JsonResponse({"arrReceitas": arrRecipes})
