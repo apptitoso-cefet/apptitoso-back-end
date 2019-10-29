@@ -77,10 +77,19 @@ class FullRecipeListView(View):
             for i in RecipeIngredient.objects.filter(recipe=r):
                 arrIngredients.append({"ingredient": str(i.quantity)+" "+i.unit_of_measurement.name+" de "+i.ingredient.description})
             arrSteps = []
-            for s in Step.objects.filter(recipe=r):
+            for s in Step.objects.filter(recipe=r).order_by('step_order'):
                 if s.timer is None:
-                    arrSteps.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description})
+                    arrSteps.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description, "picture": s.picture})
                 else:
-                    arrSteps.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description, "timer": s.timer.time})
-            arrRecipes.append({"name": r.name, "description": r.description, "picture": r.picture, "recipeAuthorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username, "ingredients": arrIngredients, "steps": arrSteps})
+                    arrSteps.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description, "picture": s.picture, "timer": s.timer.time})
+            arrRecipes.append({"key": r.pk, "name": r.name, "description": r.description, "picture": r.picture, "recipeAuthorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username, "ingredients": arrIngredients, "steps": arrSteps})
+        return JsonResponse({"arrReceitas": arrRecipes})
+
+class SavedRecipeListView(LoginRequiredMixin, View):
+    def get(self, request):
+        arrRecipes = []
+        for u in User.objects.filter(user=request.user):
+            arrRecipes.append({"name": u.user.username, "user": u.user.pk})
+            for r in u.saved_recipes.all():
+                arrRecipes.append({"name": r.object.name, "recipeAuthorName": r.user_profile.user.username})
         return JsonResponse({"arrReceitas": arrRecipes})
