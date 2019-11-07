@@ -52,7 +52,7 @@ class RecipeInsertAJAX(View):
 """
 
 
-class RecipeListView(LoginRequiredMixin, View):
+class RecipeListView(View):
     """
     Created on XXX de XXX de XXX
 
@@ -85,7 +85,7 @@ class FullRecipeListView(View):
             arrRecipes.append({"key": r.pk, "name": r.name, "description": r.description, "picture": r.picture, "recipeAuthorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username, "ingredients": arrIngredients, "steps": arrSteps})
         return JsonResponse({"arrReceitas": arrRecipes})
 
-class SavedRecipeListView(LoginRequiredMixin, View):
+class SavedRecipeListView(View):
     def get(self, request):
         arrRecipes = []
         for u in User.objects.filter(user=request.user):
