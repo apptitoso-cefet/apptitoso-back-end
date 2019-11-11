@@ -53,18 +53,12 @@ class RecipeInsertAJAX(View):
 
 
 class RecipeListView(View):
-    """
-    Created on XXX de XXX de XXX
-
-    @author: Daniel Hasan Dalip <hasan@decom.cefetmg.br>
-    Lista todas as receitas
-    """
 
     def get(self, request):
         # arr_features = sorted(arr_features, key=lambda x: x["name"])
         arrRecipes = []
         for r in Recipe.objects.all():
-            arrRecipes.append({"name": r.name, "user": request.user.pk, "recipeAuthorName": r.user_profile.user.username})
+            arrRecipes.append({"key": r.pk, "name": r.name, "picture": r.picture, "authorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username})
         return JsonResponse({"arrReceitas": arrRecipes})
 
 class FullRecipeListView(View):
