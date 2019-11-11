@@ -87,3 +87,14 @@ class SavedRecipeListView(LoginRequiredMixin ,View):
             for r in u.saved_recipes.all():
                 arrRecipes.append({"name": r.object.name, "recipeAuthorName": r.user_profile.user.username})
         return JsonResponse({"arrReceitas": arrRecipes})
+
+
+class PerfilView(LoginRequiredMixin, View):
+    def get(self, request):
+        
+        perfil = []
+        for u in User.objects.filter(user=request.user):
+            perfil.append({ "picture":u.picture, "name": u.user.username,"firstName":u.user.first_name,"lastName":u.user.last_name ,"email": u.user.email} )
+
+        return JsonResponse({"perfil": perfil})
+    
