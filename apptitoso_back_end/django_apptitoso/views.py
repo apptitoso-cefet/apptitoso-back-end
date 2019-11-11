@@ -98,3 +98,9 @@ class PerfilView(LoginRequiredMixin, View):
 
         return JsonResponse({"perfil": perfil})
     
+class CulinaryConceptListView(View):
+    def get(self, request):
+        arrCulinaryConcept = []
+        for c in CulinaryConcept.objects.all():
+            arrCulinaryConcept.append({"name": c.name})
+        return JsonResponse({"arrCulinaryConcept": arrCulinaryConcept})
