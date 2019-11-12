@@ -5,13 +5,13 @@ from django.contrib.auth import models as authModels
 
 class CulinaryConcept(models.Model):
     name = models.CharField(max_length=50)
-    picture = models.ImageField(null=True, blank=True)
+    picture = models.BinaryField(null=True, blank=True)
     description = models.TextField(default='')
 
 
 class User(models.Model):
     user = models.ForeignKey(authModels.User, models.PROTECT)
-    picture = models.ImageField(null=True, blank=True)
+    picture =  models.BinaryField(null=True)
 
     saved_recipes = models.ManyToManyField(
         'Recipe', blank=True, related_name="user_recipe")
