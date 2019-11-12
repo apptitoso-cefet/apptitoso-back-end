@@ -112,4 +112,12 @@ class FullCulinaryConceptView(View):
             culinaryConcept.append({"picture":c.picture,"name": c.name, "description":c.description })
         return JsonResponse({"arrCulinaryConcept": culinaryConcept})
 
-    
+
+
+class IndividualStepView(View):
+    def get(self, request, key, recipeKey):
+        individualStep = []
+        for i in Step.objects.filter(pk = key, recipe = recipeKey):   
+            individualStep.append({})
+
+        return JsonResponse({"individualStep": individualStep})
