@@ -25,7 +25,7 @@ urlpatterns = [
     url(r"^listSavedRecipe$", views.SavedRecipeListView.as_view()),
     url(r"^perfil$", views.PerfilView.as_view()),
     url(r"^listCulinaryConcept$", views.CulinaryConceptListView.as_view()),
-    url(r"^fullCulinaryConcept/(?P<key>[0-9])/", views.FullCulinaryConceptView.as_view()),
+    url(r"^fullCulinaryConcept/(?P<key>[\w-]+)/$", views.FullCulinaryConceptView.as_view()),
     
    
     # url(r'^featureSetConfigajaxNew$', views.FeatureSetInsertAJAX.as_view(), name='feature_set_insertAJAX'),#Test:OK

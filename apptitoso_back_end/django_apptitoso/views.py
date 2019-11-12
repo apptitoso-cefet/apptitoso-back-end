@@ -106,7 +106,7 @@ class CulinaryConceptListView(View):
         return JsonResponse({"arrCulinaryConcept": arrCulinaryConcept})
 
 class FullCulinaryConceptView(View):
-    def get(self, request, key = 1):
+    def get(self, request, key):
         culinaryConcept = []
         for c in CulinaryConcept.objects.filter(pk = key):
             culinaryConcept.append({"picture":c.picture,"name": c.name, "description":c.description })
