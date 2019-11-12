@@ -136,9 +136,12 @@ class FullCulinaryConceptView(View):
 
 
 class IndividualStepView(View):
-    def get(self, request, key, recipeKey):
+    def get(self, request, key, recipePk):
         individualStep = []
-        for i in Step.objects.filter(pk = key, recipe = recipeKey):
-            individualStep.append({})
+        for s in Step.objects.filter(pk = key, recipe = recipePk):
+            if s.timer is None:
+                individualStep.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description, "picture": s.picture})
+            else:
+                individualStep.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description, "picture": s.picture, "timer": s.timer.time})
 
         return JsonResponse({"individualStep": individualStep})

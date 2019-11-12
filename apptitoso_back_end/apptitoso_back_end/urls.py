@@ -44,7 +44,7 @@ urlpatterns = [
     url(r"^perfil$", views.PerfilView.as_view()),
     url(r"^listCulinaryConcept$", views.CulinaryConceptListView.as_view()),
     url(r"^fullCulinaryConcept/(?P<key>[\w-]+)/$", views.FullCulinaryConceptView.as_view()),
-
+    url(r"^individualStep/(?P<key>[\w-]+)/(?P<recipePk>\w+)/", views.IndividualStepView.as_view()),
 
     # url(r'^featureSetConfigajaxNew$', views.FeatureSetInsertAJAX.as_view(), name='feature_set_insertAJAX'),#Test:OK
     # url(r'^featureSetConfigajax$', views.FeatureSetEditAJAX.as_view(), name='feature_set_editAJAX'),#Test:OK
