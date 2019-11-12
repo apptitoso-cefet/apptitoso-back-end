@@ -104,3 +104,12 @@ class CulinaryConceptListView(View):
         for c in CulinaryConcept.objects.all():
             arrCulinaryConcept.append({"name": c.name})
         return JsonResponse({"arrCulinaryConcept": arrCulinaryConcept})
+
+class FullCulinaryConceptView(View):
+    def get(self, request, key = 1):
+        culinaryConcept = []
+        for c in CulinaryConcept.objects.filter(pk = key):
+            culinaryConcept.append({"picture":c.picture,"name": c.name, "description":c.description })
+        return JsonResponse({"arrCulinaryConcept": culinaryConcept})
+
+    
