@@ -15,19 +15,37 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.urls import include
 from django_apptitoso import views
 from django.conf.urls import url
+
+recipeFilterUrlTagPatterns = [
+    url(r'tag1:(?P<tag1>[0-9]+)/$', views.FilteredRecipeListView.as_view()),
+    url(r'tag1:(?P<tag1>[0-9]+)/tag2:(?P<tag2>[0-9]+)/$', views.FilteredRecipeListView.as_view()),
+    url(r'tag1:(?P<tag1>[0-9]+)/tag2:(?P<tag2>[0-9]+)/tag3:(?P<tag3>[0-9]+)/$', views.FilteredRecipeListView.as_view())
+]
+
+recipeFilterUrlPatterns = [
+    url(r'recipeName:(?P<recipeName>[A-zÀ-ÿ0-9_ ]+)/', include(recipeFilterUrlTagPatterns)),
+    url(r'recipeName:(?P<recipeName>[A-zÀ-ÿ0-9_ ]+)/$', views.FilteredRecipeListView.as_view()),
+    url(r'authorPk:(?P<authorPk>[0-9]+)/', include(recipeFilterUrlTagPatterns)),
+    url(r'authorPk:(?P<authorPk>[0-9]+)/$', views.FilteredRecipeListView.as_view()),
+    url(r'', include(recipeFilterUrlTagPatterns)),
+]
+
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     url(r"^listRecipe$", views.RecipeListView.as_view()),
-    url(r"^listFullRecipe$", views.FullRecipeListView.as_view()),
+    url(r'^listFilteredRecipe/', include(recipeFilterUrlPatterns)),
+    url(r"^listFullRecipe/(?P<key>[\d+]+)/$", views.FullRecipeListView.as_view()),
     url(r"^listSavedRecipe$", views.SavedRecipeListView.as_view()),
     url(r"^perfil$", views.PerfilView.as_view()),
     url(r"^listCulinaryConcept$", views.CulinaryConceptListView.as_view()),
     url(r"^fullCulinaryConcept/(?P<key>[\w-]+)/$", views.FullCulinaryConceptView.as_view()),
-    
-   
+
+
     # url(r'^featureSetConfigajaxNew$', views.FeatureSetInsertAJAX.as_view(), name='feature_set_insertAJAX'),#Test:OK
     # url(r'^featureSetConfigajax$', views.FeatureSetEditAJAX.as_view(), name='feature_set_editAJAX'),#Test:OK
 ]

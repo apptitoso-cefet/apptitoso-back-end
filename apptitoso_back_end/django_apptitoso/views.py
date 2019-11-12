@@ -7,6 +7,7 @@ from django.http.response import JsonResponse, HttpResponse, HttpResponseRedirec
 from django.shortcuts import render
 from django.urls.base import reverse, reverse_lazy
 from django.views.generic.base import View, TemplateView
+from django.contrib.postgres import *
 
 # Create your views here.
 """
@@ -61,12 +62,31 @@ class RecipeListView(View):
             arrRecipes.append({"key": r.pk, "name": r.name, "picture": r.picture, "authorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username})
         return JsonResponse({"arrReceitas": arrRecipes})
 
+class FilteredRecipeListView(View):
+
+    def get(self, request, recipeName=None, authorPk=None, tag1=None, tag2=None, tag3=None):
+        resultQuery = Recipe.objects.all()
+        arrRecipes = []
+        if recipeName is not None:
+            resultQuery = resultQuery.filter(name__icontains=recipeName)
+        if authorPk is not None:
+            resultQuery = resultQuery.filter(user_profile=authorPk)
+        if tag1 is not None:
+            resultQuery = resultQuery.filter(categories=tag1)
+            if tag2 is not None:
+                resultQuery = resultQuery.filter(categories=tag2)
+                if tag3 is not None:
+                    resultQuery = resultQuery.filter(categories=tag3)
+        for r in resultQuery:
+            arrRecipes.append({"key": r.pk, "name": r.name, "picture": r.picture, "authorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username})
+        return JsonResponse({"arrReceitas": arrRecipes})
+
 class FullRecipeListView(View):
 
-    def get(self, request):
+    def get(self, request, key):
         # arr_features = sorted(arr_features, key=lambda x: x["name"])
         arrRecipes = []
-        for r in Recipe.objects.all():
+        for r in Recipe.objects.get(pk = key):
             arrIngredients = []
             for i in RecipeIngredient.objects.filter(recipe=r):
                 arrIngredients.append({"ingredient": str(i.quantity)+" "+i.unit_of_measurement.name+" de "+i.ingredient.description})
@@ -89,15 +109,17 @@ class SavedRecipeListView(LoginRequiredMixin ,View):
         return JsonResponse({"arrReceitas": arrRecipes})
 
 
+
+
 class PerfilView(LoginRequiredMixin, View):
     def get(self, request):
-        
+
         perfil = []
         for u in User.objects.filter(user=request.user):
             perfil.append({ "picture":u.picture, "name": u.user.username,"firstName":u.user.first_name,"lastName":u.user.last_name ,"email": u.user.email} )
 
         return JsonResponse({"perfil": perfil})
-    
+
 class CulinaryConceptListView(View):
     def get(self, request):
         arrCulinaryConcept = []
@@ -113,11 +135,10 @@ class FullCulinaryConceptView(View):
         return JsonResponse({"arrCulinaryConcept": culinaryConcept})
 
 
-
 class IndividualStepView(View):
     def get(self, request, key, recipeKey):
         individualStep = []
-        for i in Step.objects.filter(pk = key, recipe = recipeKey):   
+        for i in Step.objects.filter(pk = key, recipe = recipeKey):
             individualStep.append({})
 
         return JsonResponse({"individualStep": individualStep})
