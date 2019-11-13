@@ -61,9 +61,9 @@ class RecipeListView(View):
         # arr_features = sorted(arr_features, key=lambda x: x["name"])
         arrRecipes = []
         for r in Recipe.objects.all():
-            if r.picture is not None:
+            try:
                 arrRecipes.append({"key": r.pk, "name": r.name, "picture": r.picture.url, "authorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username})
-            else:
+            except:
                 arrRecipes.append({"key": r.pk, "name": r.name, "authorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username})
         return JsonResponse({"arrReceitas": arrRecipes})
 
@@ -83,9 +83,9 @@ class FilteredRecipeListView(View):
                 if tag3 is not None:
                     resultQuery = resultQuery.filter(categories=tag3)
         for r in resultQuery:
-            if r.picture is not None:
+            try:
                 arrRecipes.append({"key": r.pk, "name": r.name, "picture": r.picture.url, "authorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username})
-            else:
+            except:
                 arrRecipes.append({"key": r.pk, "name": r.name, "authorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username})
         return JsonResponse({"arrReceitas": arrRecipes})
 
@@ -94,26 +94,26 @@ class FullRecipeListView(View):
     def get(self, request, key):
         # arr_features = sorted(arr_features, key=lambda x: x["name"])
         arrRecipes = []
-        for r in Recipe.objects.get(pk = key):
-            arrIngredients = []
-            for i in RecipeIngredient.objects.filter(recipe=r):
-                arrIngredients.append({"ingredient": str(i.quantity)+" "+i.unit_of_measurement.name+" de "+i.ingredient.description})
-            arrSteps = []
-            for s in Step.objects.filter(recipe=r).order_by('step_order'):
-                if s.timer is None:
-                    if s.picture is not None:
-                        arrSteps.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description, "picture": s.picture})
-                    else:
-                        arrSteps.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description})
-                else:
-                    if s.picture is not None:
-                        arrSteps.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description, "picture": s.picture.url, "timer": s.timer.time})
-                    else:
-                        arrSteps.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description, "timer": s.timer.time})
-            if r.picture is not None:
-                arrRecipes.append({"key": r.pk, "name": r.name, "description": r.description, "picture": r.picture, "recipeAuthorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username, "ingredients": arrIngredients, "steps": arrSteps})
+        r = Recipe.objects.get(pk = key)
+        arrIngredients = []
+        for i in RecipeIngredient.objects.filter(recipe=r):
+            arrIngredients.append({"ingredient": str(i.quantity)+" "+i.unit_of_measurement.name+" de "+i.ingredient.description})
+        arrSteps = []
+        for s in Step.objects.filter(recipe=r).order_by('step_order'):
+            if s.timer is None:
+                try:
+                    arrSteps.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description, "picture": s.picture.url})
+                except:
+                    arrSteps.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description})
             else:
-                arrRecipes.append({"key": r.pk, "name": r.name, "description": r.description, "recipeAuthorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username, "ingredients": arrIngredients, "steps": arrSteps})
+                try:
+                    arrSteps.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description, "picture": s.picture.url, "timer": s.timer.time})
+                except:
+                    arrSteps.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description, "timer": s.timer.time})
+        try:
+            arrRecipes.append({"key": r.pk, "name": r.name, "description": r.description, "picture": r.picture.url, "recipeAuthorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username, "ingredients": arrIngredients, "steps": arrSteps})
+        except:
+            arrRecipes.append({"key": r.pk, "name": r.name, "description": r.description, "recipeAuthorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username, "ingredients": arrIngredients, "steps": arrSteps})
         return JsonResponse({"arrReceitas": arrRecipes})
 
 
@@ -123,29 +123,31 @@ class SavedRecipeListView(LoginRequiredMixin, View):
         loggedUser = request.user
         u = User.objects.get(user=loggedUser)
         for r in u.saved_recipes.all():
-            if r.picture is not None:
+            try:
                 arrRecipes.append({"key": r.pk, "name": r.name, "picture": r.picture.url, "authorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username})
-            else:
+            except:
                 arrRecipes.append({"key": r.pk, "name": r.name, "authorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username})
         return JsonResponse({"arrReceitas": arrRecipes})
 
 
 class PerfilView(LoginRequiredMixin, View):
+
     def get(self, request):
-        
+
         perfil = []
-        u = User.objects.get(username=request.user)
-        if u.picture is not None:
-            perfil.append({ "key":u.pk, "name": u.username, "firstName":u.first_name, "lastName":u.last_name, "picture": u.picture.url, "email": u.user.email} )
-        else:
-            perfil.append({ "key":u.pk, "name": u.username, "firstName":u.first_name, "lastName":u.last_name, "email": u.email} )
+        loggedUser = request.user
+        u = User.objects.get(user=loggedUser)
+        try:
+            perfil.append({ "key":u.pk, "name": u.user.username, "firstName":u.user.first_name, "lastName":u.user.last_name, "picture": u.picture.url, "email": u.user.email} )
+        except:
+            perfil.append({ "key":u.pk, "name": u.user.username, "firstName":u.user.first_name, "lastName":u.user.last_name, "email": u.user.email} )
 
         return JsonResponse({"perfil": perfil})
 
 class ChangePasswordView( View):
     def get(self, request, user, password):
 
-        perfil = [] 
+        perfil = []
         u = User.objects.get(user=user)
         u.user.set_password(password)
         u.user.save()
@@ -183,9 +185,9 @@ class FullCulinaryConceptView(View):
     def get(self, request, key):
         culinaryConcept = []
         for c in CulinaryConcept.objects.filter(pk = key):
-            if c.picture is not None:
+            try:
                 culinaryConcept.append({"pk": c.pk, "name": c.name, "picture":c.picture, "description":c.description })
-            else:
+            except:
                 culinaryConcept.append({"pk": c.pk, "name": c.name, "description":c.description })
         return JsonResponse({"arrCulinaryConcept": culinaryConcept})
 
@@ -195,14 +197,14 @@ class IndividualStepView(View):
         individualStep = []
         for s in Step.objects.filter(pk = key, recipe = recipePk):
             if s.timer is None:
-                if s.picture is not None:
+                try:
                     arrSteps.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description, "picture": s.picture})
-                else:
+                except:
                     arrSteps.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description})
             else:
-                if s.picture is not None:
+                try:
                     arrSteps.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description, "picture": s.picture.url, "timer": s.timer.time})
-                else:
+                except:
                     arrSteps.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description, "timer": s.timer.time})
 
         return JsonResponse({"individualStep": individualStep})
@@ -210,7 +212,7 @@ class IndividualStepView(View):
 class SignUpView(View):
     def get(self, request, username, email, lastName, firstName, password):
         if User.objects.filter(username=username).exists():
-           return JsonResponse({"perfil": "insira aqui a exception"}) 
+           return JsonResponse({"perfil": "insira aqui a exception"})
         else:
             u = User.objects.create_user(username, email, password)
             u.last_name = lastName
@@ -227,5 +229,3 @@ class SignUpView(View):
             login(request, user)
 
             return JsonResponse({"perfil": perfil})
-
-  
