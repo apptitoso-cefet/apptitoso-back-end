@@ -177,12 +177,16 @@ class IndividualStepView(View):
         return JsonResponse({"individualStep": individualStep})
 
 class SignUpView(View):
-    def get(self, request, username, email, lastName, firstName):
+    def get(self, request, username, email, lastName, firstName, password):
         
-        u = User.objects.create_user(username)
+        u = User.objects.create_user(username, email, password)
         u.last_name = lastName
         u.first_name = firstName
         u.save()
-        
-        return JsonResponse({"perfil": "insira aqui"})
+        newUser = User.objects.get(username=username)
+        perfil = []
+        perfil.append({ "name": newUser.username,"firstName":newUser.first_name,"lastName":newUser.last_name ,"email": newUser.email} )
+
+        return JsonResponse({"perfil": perfil})
+        #return JsonResponse({"perfil": "insira aqui"})
   
