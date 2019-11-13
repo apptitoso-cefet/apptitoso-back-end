@@ -90,18 +90,14 @@ class Command(BaseCommand):
         User.objects.get_or_create(user = tempUser)
 
         Recipe.objects.get_or_create(name= "Pão de Queijo",
-                                    description= "O pão de queijo é a receita perfeita para o seu lanche da tarde! Delicioso, ele combina com o café quentinho ou um suco bem gelado.",
-                                    )
+                                    description= "O pão de queijo é a receita perfeita para o seu lanche da tarde! Delicioso, ele combina com o café quentinho ou um suco bem gelado.",)
 
         Recipe.objects.get_or_create(name= "Compota de Abacaxi",
-                                    description= "Receita de compota de abacaxi, perfumada com especiarias como gengibre, cravo e canela e um toque de cachaça para finalizar.",
-                                    )
+                                    description= "Receita de compota de abacaxi, perfumada com especiarias como gengibre, cravo e canela e um toque de cachaça para finalizar.",)
         
-        Recipe.objects.get_or_create(name= "Coxinha Fit",
-                                    description= "Coxinha Fit pré treino",
-                                    )
+        Recipe.objects.get_or_create(name= "Bife a Parmegiana",
+                                    description= "Prato de restaurante preparado em casa tem seu charme: a farinha de rosca caseira deixa o bife mais crocante e o molho de tomate dá um sabor ainda mais especial ao prato.",)
 
         Recipe.objects.get_or_create(name= "Camarão na Moranga",
-                                    description= "Aprenda a fazer esta deliciosa receita de Abóbora Moranga recheada com Camarões e creme de leite e prove que esta receita feita em casa é outra coisa!",
-                                    )
+                                    description= "Aprenda a fazer esta deliciosa receita de Abóbora Moranga recheada com Camarões e creme de leite e prove que esta receita feita em casa é outra coisa!",)
         
