@@ -212,7 +212,7 @@ class IndividualStepView(View):
 class SignUpView(View):
     def get(self, request, username, email, lastName, firstName, password):
         if User.objects.filter(username=username).exists():
-           return JsonResponse({"perfil": "insira aqui a exception"})
+           return JsonResponse({"signUp": "false", "problem":"Usuário já existe"})
         else:
             u = User.objects.create_user(username, email, password)
             u.last_name = lastName
@@ -228,4 +228,21 @@ class SignUpView(View):
             user = authenticate(username=logUsername, password=logPassword)
             login(request, user)
 
-            return JsonResponse({"perfil": perfil})
+            return JsonResponse({"signUp": perfil})
+
+class LoginView(View):
+
+    def get(self, request, username, password):
+        if User.objects.filter(username=username).exists():
+            logUsername = username
+            logPassword = password
+            user = authenticate(username=logUsername, password=logPassword)
+            if user is not None:
+                login(request, user)
+                return JsonResponse({"login": "true"})
+            else:
+               return JsonResponse({"login": "false", "problem":"Senha incorreta"})    
+
+            
+        else:
+            return JsonResponse({"login": "false", "problem":"Usuario incorreto"})
