@@ -119,6 +119,18 @@ class PerfilView(LoginRequiredMixin, View):
 
         return JsonResponse({"perfil": perfil})
 
+class ChangePasswordView( View):
+    def get(self, request, user, password):
+
+        perfil = []
+        u = User.objects.get(user=user)
+        u.user.set_password(password)
+        u.user.save()
+
+        perfil.append({ "picture":u.picture, "name": u.user.username,"firstName": u.user.first_name,"lastName": u.user.last_name, "email": u.user.email} )
+
+        return JsonResponse({"perfil": perfil})
+
 class EditProfileInfoView(LoginRequiredMixin, View):
     def get(self, request, username=None, firstname=None, lastname=None):
 
