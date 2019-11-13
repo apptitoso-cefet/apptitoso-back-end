@@ -40,7 +40,7 @@ urlpatterns = [
     url(r"^listRecipe$", views.RecipeListView.as_view()),
     url(r'^listFilteredRecipe/', include(recipeFilterUrlPatterns)),
     url(r"^listFullRecipe/(?P<key>[\d+]+)/$", views.FullRecipeListView.as_view()),
-    url(r"^listSavedRecipe$", views.SavedRecipeListView.as_view()),
+    url(r"^listSavedRecipe/$", views.SavedRecipeListView.as_view()),
     url(r"^perfil$", views.PerfilView.as_view()),
     url(r"^listCulinaryConcept$", views.CulinaryConceptListView.as_view()),
     url(r"^fullCulinaryConcept/(?P<key>[\w-]+)/$", views.FullCulinaryConceptView.as_view()),

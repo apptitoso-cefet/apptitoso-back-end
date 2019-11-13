@@ -99,16 +99,15 @@ class FullRecipeListView(View):
             arrRecipes.append({"key": r.pk, "name": r.name, "description": r.description, "picture": r.picture, "recipeAuthorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username, "ingredients": arrIngredients, "steps": arrSteps})
         return JsonResponse({"arrReceitas": arrRecipes})
 
-class SavedRecipeListView(LoginRequiredMixin ,View):
+
+class SavedRecipeListView(LoginRequiredMixin, View):
     def get(self, request):
         arrRecipes = []
-        for u in User.objects.filter(user=request.user):
-            arrRecipes.append({"name": u.user.username, "user": u.user.pk})
-            for r in u.saved_recipes.all():
-                arrRecipes.append({"name": r.object.name, "recipeAuthorName": r.user_profile.user.username})
+        loggedUser = request.user
+        u = User.objects.get(user=loggedUser)
+        for r in u.saved_recipes.all():
+            arrRecipes.append({"key": r.pk, "name": r.name, "picture": r.picture, "authorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username})
         return JsonResponse({"arrReceitas": arrRecipes})
-
-
 
 
 class PerfilView(LoginRequiredMixin, View):

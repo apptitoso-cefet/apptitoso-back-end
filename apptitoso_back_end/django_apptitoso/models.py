@@ -8,6 +8,9 @@ class CulinaryConcept(models.Model):
     picture = models.BinaryField(null=True, blank=True)
     description = models.TextField(default='')
 
+    def __str__(self):
+        return self.name
+
 
 class User(models.Model):
     user = models.ForeignKey(authModels.User, models.PROTECT)
@@ -15,6 +18,9 @@ class User(models.Model):
 
     saved_recipes = models.ManyToManyField(
         'Recipe', blank=True, related_name="user_recipe")
+
+    def __str__(self):
+        return self.user.username
 
 
 class Recipe(models.Model):
@@ -34,6 +40,9 @@ class Category(models.Model):
         verbose_name_plural = 'Categories'
     name = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.name
+
 
 class Step(models.Model):
     recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE)
@@ -51,11 +60,17 @@ class StepTimer(models.Model):
 class Ingredient(models.Model):
     description = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.description
+
 
 class UnitOfMeasurement(models.Model):
     class Meta:
         verbose_name_plural = 'Units of Measurement'
     name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
 
 
 class RecipeIngredient(models.Model):
@@ -72,6 +87,9 @@ class EvaluationCriterion(models.Model):
     class Meta:
         verbose_name_plural: 'Evaluation criteria'
     name = models.CharField(null=True, max_length=40)
+
+    def __str__(self):
+        return self.name
 
 
 class Evaluation(models.Model):
