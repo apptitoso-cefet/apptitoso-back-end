@@ -9,6 +9,7 @@ from django.urls.base import reverse, reverse_lazy
 from django.views.generic.base import View, TemplateView
 from django.contrib.postgres import *
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
 
 # Create your views here.
 """
@@ -131,20 +132,20 @@ class SavedRecipeListView(LoginRequiredMixin, View):
 
 class PerfilView(LoginRequiredMixin, View):
     def get(self, request):
-
+        
         perfil = []
-        for u in User.objects.filter(user=request.user):
-            if r.picture is not None:
-                perfil.append({ "key":u.pk, "name": u.user.username, "firstName":u.user.first_name, "lastName":u.user.last_name, "picture": u.picture.url, "email": u.user.email} )
-            else:
-                perfil.append({ "key":u.pk, "name": u.user.username, "firstName":u.user.first_name, "lastName":u.user.last_name, "email": u.user.email} )
+        u = User.objects.get(username=request.user)
+        if u.picture is not None:
+            perfil.append({ "key":u.pk, "name": u.username, "firstName":u.first_name, "lastName":u.last_name, "picture": u.picture.url, "email": u.user.email} )
+        else:
+            perfil.append({ "key":u.pk, "name": u.username, "firstName":u.first_name, "lastName":u.last_name, "email": u.email} )
 
         return JsonResponse({"perfil": perfil})
 
 class ChangePasswordView( View):
     def get(self, request, user, password):
 
-        perfil = []
+        perfil = [] 
         u = User.objects.get(user=user)
         u.user.set_password(password)
         u.user.save()
@@ -218,6 +219,12 @@ class SignUpView(View):
             newUser = User.objects.get(username=username)
             perfil = []
             perfil.append({ "name": newUser.username,"firstName":newUser.first_name,"lastName":newUser.last_name ,"email": newUser.email} )
+
+            #auto login test
+            logUsername = username
+            logPassword = password
+            user = authenticate(username=logUsername, password=logPassword)
+            login(request, user)
 
             return JsonResponse({"perfil": perfil})
 
