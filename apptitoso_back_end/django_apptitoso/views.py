@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.urls.base import reverse, reverse_lazy
 from django.views.generic.base import View, TemplateView
 from django.contrib.postgres import *
+from django.contrib.auth.models import User
 
 # Create your views here.
 """
@@ -174,3 +175,16 @@ class IndividualStepView(View):
                 individualStep.append({"key": s.pk, "stepOrder": s.step_order, "description": s.description, "picture": s.picture, "timer": s.timer.time})
 
         return JsonResponse({"individualStep": individualStep})
+
+"""class SignInView(View):
+    def get(self, request, username, email, lastName, firstName):
+        username = User.user
+        u = User.objects.create_user("balala")
+        u.last_name = lastName
+        u.first_name = firstName
+        perfil = []
+        for us in User.objects.filter(user=u):
+            perfil.append({ "picture":us.picture, "name": us.user.username,"firstName":us.user.first_name,"lastName":us.user.last_name ,"email": us.user.email} )
+
+        return JsonResponse({"perfil": perfil})
+  """
