@@ -176,9 +176,9 @@ class IndividualStepView(View):
 
         return JsonResponse({"individualStep": individualStep})
 
-"""class SignInView(View):
+class SignUpView(View):
     def get(self, request, username, email, lastName, firstName):
-        username = User.user
+        
         u = User.objects.create_user("balala")
         u.last_name = lastName
         u.first_name = firstName
@@ -187,4 +187,4 @@ class IndividualStepView(View):
             perfil.append({ "picture":us.picture, "name": us.user.username,"firstName":us.user.first_name,"lastName":us.user.last_name ,"email": us.user.email} )
 
         return JsonResponse({"perfil": perfil})
-  """
+  
