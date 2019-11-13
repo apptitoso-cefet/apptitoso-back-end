@@ -119,6 +119,25 @@ class PerfilView(LoginRequiredMixin, View):
 
         return JsonResponse({"perfil": perfil})
 
+class EditProfileInfoView(LoginRequiredMixin, View):
+    def get(self, request, username=None, firstname=None, lastname=None):
+
+        u = User.objects.get(user=request.user)
+        print (u)
+        if username is not None:
+            u.user.username=username
+        if firstname is not None:
+            u.user.first_name=firstname
+        if lastname is not None:
+            u.user.last_name=lastname
+
+        u.save()
+
+        profile = []
+        profile.append({ "picture":u.picture, "name": u.user.username,"firstName":u.user.first_name,"lastName":u.user.last_name ,"email": u.user.email} )
+
+        return JsonResponse({"profile": profile})
+
 class CulinaryConceptListView(View):
     def get(self, request):
         arrCulinaryConcept = []

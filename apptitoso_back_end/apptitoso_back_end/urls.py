@@ -33,7 +33,17 @@ recipeFilterUrlPatterns = [
     url(r'', include(recipeFilterUrlTagPatterns)),
 ]
 
+nameUrlPatterns = [
+    url(r'firstname:(?P<firstname>[A-zÀ-ÿ ]+)/$', views.EditProfileInfoView.as_view()),
+    url(r'firstname:(?P<firstname>[A-zÀ-ÿ ]+)/lastname:(?P<lastname>[A-zÀ-ÿ ]+)/$', views.EditProfileInfoView.as_view()),
+    url(r'lastname:(?P<lastname>[A-zÀ-ÿ ]+)/', views.EditProfileInfoView.as_view()),
+]
 
+usernameUrlPatterns = [
+    url(r'username:(?P<username>[A-zÀ-ÿ0-9_.@+-]+)/', include(nameUrlPatterns)),
+    url(r'username:(?P<username>[A-zÀ-ÿ0-9_.@+-]+)/$',  views.EditProfileInfoView.as_view()),
+    url(r'', include(nameUrlPatterns))
+]
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -42,6 +52,7 @@ urlpatterns = [
     url(r"^listFullRecipe/(?P<key>[\d+]+)/$", views.FullRecipeListView.as_view()),
     url(r"^listSavedRecipe/$", views.SavedRecipeListView.as_view()),
     url(r"^perfil$", views.PerfilView.as_view()),
+    url(r'^editProfile', include(usernameUrlPatterns)),
     url(r"^listCulinaryConcept$", views.CulinaryConceptListView.as_view()),
     url(r"^fullCulinaryConcept/(?P<key>[\w-]+)/$", views.FullCulinaryConceptView.as_view()),
     url(r"^individualStep/(?P<key>[\w-]+)/(?P<recipePk>\w+)/", views.IndividualStepView.as_view()),
