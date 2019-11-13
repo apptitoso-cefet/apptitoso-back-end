@@ -208,15 +208,17 @@ class IndividualStepView(View):
 
 class SignUpView(View):
     def get(self, request, username, email, lastName, firstName, password):
-        
-        u = User.objects.create_user(username, email, password)
-        u.last_name = lastName
-        u.first_name = firstName
-        u.save()
-        newUser = User.objects.get(username=username)
-        perfil = []
-        perfil.append({ "name": newUser.username,"firstName":newUser.first_name,"lastName":newUser.last_name ,"email": newUser.email} )
+        if User.objects.filter(username=username).exists():
+           return JsonResponse({"perfil": "insira aqui a exception"}) 
+        else:
+            u = User.objects.create_user(username, email, password)
+            u.last_name = lastName
+            u.first_name = firstName
+            u.save()
+            newUser = User.objects.get(username=username)
+            perfil = []
+            perfil.append({ "name": newUser.username,"firstName":newUser.first_name,"lastName":newUser.last_name ,"email": newUser.email} )
 
-        return JsonResponse({"perfil": perfil})
-        #return JsonResponse({"perfil": "insira aqui"})
+            return JsonResponse({"perfil": perfil})
+
   
