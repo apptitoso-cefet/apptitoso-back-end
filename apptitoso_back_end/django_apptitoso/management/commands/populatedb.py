@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.contrib.auth import models as authModels
 from django_apptitoso.models import *
 
 class Command(BaseCommand):
@@ -52,4 +53,55 @@ class Command(BaseCommand):
         CulinaryConcept.objects.get_or_create(name="Empanar",
                     picture = "uploads/culinaryConcepts/empanar.jpeg",
                     description = "uma técnica culinária bastante popular a qual pode ser aplicada em legumes e carnes em geral para conferir crocância, textura e sabor especial à comida.")
+        
+
+
+        Category.objects.get_or_create(name="Recomendação Apptitosa")
+        Category.objects.get_or_create(name="Saudável")
+        Category.objects.get_or_create(name="Vegetariano")
+        Category.objects.get_or_create(name="Vegano")
+        Category.objects.get_or_create(name="Para Iniciantes :)")
+        Category.objects.get_or_create(name="Doce")
+        Category.objects.get_or_create(name="Bolo")
+        Category.objects.get_or_create(name="Carne")
+        Category.objects.get_or_create(name="Salada")
+        Category.objects.get_or_create(name="Frutos do Mar")
+        Category.objects.get_or_create(name="Peixe")
+        Category.objects.get_or_create(name="Bebida")
+        Category.objects.get_or_create(name="Massa")
+        Category.objects.get_or_create(name="Barato")
+        Category.objects.get_or_create(name="Mexicano")
+        Category.objects.get_or_create(name="Japonês")
+        Category.objects.get_or_create(name="Europeu")
+        Category.objects.get_or_create(name="Asiático")
+        Category.objects.get_or_create(name="Barato")
+        Category.objects.get_or_create(name="Rende Muito")
+        Category.objects.get_or_create(name="Bonito")
+
+
+        authModels.User.objects.get_or_create(username="vovovo",
+                                                    first_name="Betinha",
+                                                    last_name="Vovó",
+                                                    email="vovozinha@vovo.com")
+        
+        tempUser = authModels.User.objects.get(username="vovovo")
+        tempUser.set_password("senha")
+
+        User.objects.get_or_create(user = tempUser)
+
+        Recipe.objects.get_or_create(name= "Pão de Queijo",
+                                    description= "O pão de queijo é a receita perfeita para o seu lanche da tarde! Delicioso, ele combina com o café quentinho ou um suco bem gelado.",
+                                    )
+
+        Recipe.objects.get_or_create(name= "Compota de Abacaxi",
+                                    description= "Receita de compota de abacaxi, perfumada com especiarias como gengibre, cravo e canela e um toque de cachaça para finalizar.",
+                                    )
+        
+        Recipe.objects.get_or_create(name= "Coxinha Fit",
+                                    description= "Coxinha Fit pré treino",
+                                    )
+
+        Recipe.objects.get_or_create(name= "Camarão na Moranga",
+                                    description= "Aprenda a fazer esta deliciosa receita de Abóbora Moranga recheada com Camarões e creme de leite e prove que esta receita feita em casa é outra coisa!",
+                                    )
         

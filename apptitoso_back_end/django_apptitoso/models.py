@@ -27,7 +27,7 @@ class Recipe(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     picture =  models.ImageField(upload_to='uploads/recipe/picture', null=True)
-    user_profile = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_profile = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     categories = models.ManyToManyField('Category', blank=True)
 
