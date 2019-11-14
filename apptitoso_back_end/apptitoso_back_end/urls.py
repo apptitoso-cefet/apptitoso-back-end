@@ -51,6 +51,7 @@ urlpatterns = [
     url(r'^listFilteredRecipe/', include(recipeFilterUrlPatterns)),
     url(r"^listFullRecipe/(?P<key>[\d+]+)/$", views.FullRecipeListView.as_view()),
     url(r"^listSavedRecipe/(?P<key>[\d+]+)/$", views.SavedRecipeListView.as_view()),
+    url(r"^listCreatedRecipe/(?P<authorPk>[\d+]+)/$", views.CreatedRecipeListView.as_view()),
     url(r"^perfil/(?P<key>[\d+]+)/$", views.PerfilView.as_view()),
     url(r'^editProfile/(?P<key>[\d+]+)/', include(usernameUrlPatterns)),
     url(r'^changePassword/(?P<user>[0-9]+)/(?P<password>[A-zÀ-ÿ0-9_.@+-]+)/$', views.ChangePasswordView.as_view()),

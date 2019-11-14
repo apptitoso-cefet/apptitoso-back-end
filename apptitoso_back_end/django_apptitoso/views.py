@@ -116,6 +116,16 @@ class FullRecipeListView(View):
             arrRecipes.append({"key": r.pk, "name": r.name, "description": r.description, "recipeAuthorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username, "ingredients": arrIngredients, "steps": arrSteps})
         return JsonResponse({"arrReceitas": arrRecipes})
 
+class CreatedRecipeListView(View):
+    def get(self, request, authorPk):
+        arrRecipes = []
+        for r in Recipe.objects.filter(user_profile=authorPk):
+            try:
+                arrRecipes.append({"key": r.pk, "name": r.name, "picture": r.picture.url, "authorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username})
+            except:
+                arrRecipes.append({"key": r.pk, "name": r.name, "authorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username})
+        return JsonResponse({"arrReceitas": arrRecipes})
+
 
 class SavedRecipeListView(View):
     def get(self, request, key):
@@ -211,7 +221,7 @@ class IndividualStepView(View):
 
 class SignUpView(View):
     def get(self, request, username, email, lastName, firstName, password):
-        
+
         if AuthUser.objects.filter(username=username).exists():
            return JsonResponse({"signUp": "false", "problem":"Usuário já existe"})
         else:
