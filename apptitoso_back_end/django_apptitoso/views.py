@@ -218,7 +218,7 @@ class SignUpView(View):
             u.last_name = lastName
             u.first_name = firstName
             u.save()
-            newUser = User.objects.get(username=username)
+            newUser = AuthUser.objects.get(username=username)
             perfil = []
             perfil.append({ "name": newUser.username,"firstName":newUser.first_name,"lastName":newUser.last_name ,"email": newUser.email} )
 
