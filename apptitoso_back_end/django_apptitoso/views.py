@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.urls.base import reverse, reverse_lazy
 from django.views.generic.base import View, TemplateView
 from django.contrib.postgres import *
-from django.contrib.auth.models import AuthUser
+from django.contrib.auth.models import User as AuthUser
 from django.contrib.auth import authenticate, login
 
 # Create your views here.
