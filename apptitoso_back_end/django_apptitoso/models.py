@@ -5,7 +5,7 @@ from django.contrib.auth import models as authModels
 
 class CulinaryConcept(models.Model):
     name = models.CharField(max_length=50)
-    picture =  models.ImageField(upload_to='uploads/culinaryConcept', null=True)
+    picture =  models.ImageField(upload_to='uploads/culinaryConcept', null=True, blank=True)
     description = models.TextField(default='')
 
     def __str__(self):
@@ -14,7 +14,7 @@ class CulinaryConcept(models.Model):
 
 class User(models.Model):
     user = models.ForeignKey(authModels.User, models.PROTECT)
-    picture =  models.ImageField(upload_to='uploads/user', null=True)
+    picture =  models.ImageField(upload_to='uploads/user', null=True, blank=True)
 
     saved_recipes = models.ManyToManyField(
         'Recipe', blank=True, related_name="user_recipe")
@@ -26,7 +26,7 @@ class User(models.Model):
 class Recipe(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    picture =  models.ImageField(upload_to='uploads/recipe/picture', null=True)
+    picture =  models.ImageField(upload_to='uploads/recipe/picture', null=True, blank=True)
     user_profile = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     categories = models.ManyToManyField('Category', blank=True)
@@ -48,7 +48,7 @@ class Step(models.Model):
     recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE)
     description = models.TextField()
     step_order = models.IntegerField()
-    picture =  models.ImageField(upload_to='uploads/recipe/step', null=True)
+    picture =  models.ImageField(upload_to='uploads/recipe/step', null=True, blank=True)
     timer = models.OneToOneField(
         'StepTimer', on_delete=models.CASCADE, null=True, blank=True)
 
