@@ -117,11 +117,10 @@ class FullRecipeListView(View):
         return JsonResponse({"arrReceitas": arrRecipes})
 
 
-class SavedRecipeListView(LoginRequiredMixin, View):
-    def get(self, request):
+class SavedRecipeListView(View):
+    def get(self, request, key):
         arrRecipes = []
-        loggedUser = request.user
-        u = User.objects.get(user=loggedUser)
+        u = User.objects.get(pk=key)
         for r in u.saved_recipes.all():
             try:
                 arrRecipes.append({"key": r.pk, "name": r.name, "picture": r.picture.url, "authorKey": r.user_profile.user.pk, "recipeAuthorName": r.user_profile.user.username})
@@ -130,13 +129,12 @@ class SavedRecipeListView(LoginRequiredMixin, View):
         return JsonResponse({"arrReceitas": arrRecipes})
 
 
-class PerfilView(LoginRequiredMixin, View):
+class PerfilView(View):
 
-    def get(self, request):
+    def get(self, request, key):
 
         perfil = []
-        loggedUser = request.user
-        u = User.objects.get(user=loggedUser)
+        u = User.objects.get(pk=key)
         try:
             perfil.append({ "key":u.pk, "name": u.user.username, "firstName":u.user.first_name, "lastName":u.user.last_name, "picture": u.picture.url, "email": u.user.email} )
         except:
@@ -144,7 +142,7 @@ class PerfilView(LoginRequiredMixin, View):
 
         return JsonResponse({"perfil": perfil})
 
-class ChangePasswordView( View):
+class ChangePasswordView(View):
     def get(self, request, user, password):
 
         perfil = []
@@ -156,10 +154,10 @@ class ChangePasswordView( View):
 
         return JsonResponse({"perfil": perfil})
 
-class EditProfileInfoView(LoginRequiredMixin, View):
-    def get(self, request, username=None, firstname=None, lastname=None):
+class EditProfileInfoView(View):
+    def get(self, request, key, username=None, firstname=None, lastname=None):
 
-        u = User.objects.get(user=request.user)
+        u = User.objects.get(user=key)
         if username is not None:
             u.user.username=username
         if firstname is not None:
@@ -241,8 +239,8 @@ class LoginView(View):
                 login(request, user)
                 return JsonResponse({"login": "true"})
             else:
-               return JsonResponse({"login": "false", "problem":"Senha incorreta"})    
+               return JsonResponse({"login": "false", "problem":"Senha incorreta"})
 
-            
+
         else:
             return JsonResponse({"login": "false", "problem":"Usuario incorreto"})
