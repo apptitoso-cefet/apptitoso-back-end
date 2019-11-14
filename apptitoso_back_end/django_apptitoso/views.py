@@ -211,10 +211,11 @@ class IndividualStepView(View):
 
 class SignUpView(View):
     def get(self, request, username, email, lastName, firstName, password):
-        if User.objects.filter(username=username).exists():
+        
+        if AuthUser.objects.filter(username=username).exists():
            return JsonResponse({"signUp": "false", "problem":"Usuário já existe"})
         else:
-            u = User.objects.create_user(username, email, password)
+            u = AuthUser.objects.create_user(username, email, password)
             u.last_name = lastName
             u.first_name = firstName
             u.save()
@@ -233,7 +234,8 @@ class SignUpView(View):
 class LoginView(View):
 
     def get(self, request, username, password):
-        if User.objects.filter(username=username).exists():
+
+        if AuthUser.objects.filter(username=username).exists():
             logUsername = username
             logPassword = password
             user = authenticate(username=logUsername, password=logPassword)
